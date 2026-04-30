@@ -19,7 +19,7 @@ spec:
       runtimeClassName: nvidia
       containers:
         - name: fl-client
-          image: unknowming/fl-client-oring:v2.0
+          image: unknowming/fl-client-orin:v2.0
           env:
             - name: NVIDIA_VISIBLE_DEVICES
               value: "all"
