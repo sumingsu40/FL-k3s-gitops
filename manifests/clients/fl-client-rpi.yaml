@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fl-client-rpi
+  namespace: fl-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fl-client
+      node: rpi
+  template:
+    metadata:
+      labels:
+        app: fl-client
+        node: rpi
+    spec:
+      nodeName: yhgwpi
+      containers:
+        - name: fl-client
+          image: unknowming/client-rpi
+          args:
+            - "-cid"
+            - "0"
+            - "-d"
+            - "cpu"
+            - "-su"
+            - "fl-server.fl-system.svc.cluster.local:3000"
