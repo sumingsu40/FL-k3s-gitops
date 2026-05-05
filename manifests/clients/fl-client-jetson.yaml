@@ -21,14 +21,21 @@ spec:
         - name: fl-client
           image: unknowming/fl-client-orin:v2.2
           env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
             - name: NVIDIA_VISIBLE_DEVICES
               value: "all"
             - name: NVIDIA_DRIVER_CAPABILITIES
               value: "all"
+          command: ["/bin/sh", "-c"]
           args:
-            - "-cid"
-            - "0"
-            - "-d"
-            - "cuda"
-            - "-su"
-            - "fl-server.fl-system.svc.cluster.local:3000"
+            - |
+              case "$NODE_NAME" in
+                jetson02) CID=0 ;;
+                jetson03) CID=1 ;;
+                jetson04) CID=2 ;;
+                *) echo "unknown node: $NODE_NAME"; exit 1 ;;
+              esac
+              exec python3 /workspace/client/main.py -cid "$CID" -d cuda -su fl-server.fl-system.svc.cluster.local:3000
