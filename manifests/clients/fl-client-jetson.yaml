@@ -1,25 +1,25 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
-  name: fl-client-jetson03
+  name: fl-client-jetson
   namespace: fl-system
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: fl-client
-      node: jetson03
+      device: jetson
   template:
     metadata:
       labels:
         app: fl-client
-        node: jetson03
+        device: jetson
     spec:
-      nodeName: jetson03
+      nodeSelector:
+        device: jetson
       runtimeClassName: nvidia
       containers:
         - name: fl-client
-          image: unknowming/fl-client-orin:v2.0
+          image: unknowming/fl-client-orin:v2.2
           env:
             - name: NVIDIA_VISIBLE_DEVICES
               value: "all"
